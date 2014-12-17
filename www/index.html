@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js'></script>
+    <script>
+        requirejs.config({
+            paths:{
+                jquery:'//code.jquery.com/jquery-1.11.1.min',
+                'plynd-sdk':'//sandbox.plynd.com/plynd-sdk-0.1-unstable.min'
+            },
+            baseUrl:'./js'
+        });
+
+        // Load the dependencies, then our app
+        // (server.js requires the object Plynd to exist so we need to load it first)
+        require(['jquery', 'plynd-sdk'], function() {
+            require(['app'], function(App) {
+                // Ready to go
+                App.launch();
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+<div id="page">
+    <div id="board"></div>
+    <div id="turn"></div>
+</div>
+</body>
+</html>

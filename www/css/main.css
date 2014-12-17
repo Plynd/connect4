@@ -1,0 +1,40 @@
+
+html {
+    height:100%;
+    width:100%;
+    background:white;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+    margin:0;
+}
+
+body > h1 {
+    line-height: 100%;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.gem {
+    border-radius:50%;
+    margin:10px;
+    width: 30px;
+    height: 30px;
+}
+
+.gem.available {
+    border: 2px solid #DDDDDD;
+    background-color: #F6F6F6;
+}
+
+.row {
+    display:inline-block;
+    width:40px;
+
+}
