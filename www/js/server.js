@@ -2,7 +2,7 @@
  * This file is specific to the Plynd framework.
  * The rationale is that for development purposes it can be run in the browser when the application is not
  * published yet. Later, it has to be uploaded to Plynd servers, where it will be run.
- * The reason is that the endpoint to update the game state (Plynd.put('/game/{id}')) is not available from
+ * The reason is that the endpoint to update the game state (Plynd.updateGame(...)) is not available from
  * the browser scope while in production, to avoid cheats.
  *
  * It can have any name, but if using require (as here), it has to be explicitly built with the module name 'server'
@@ -57,27 +57,17 @@ define([
             // Check if this is a winning position
             var event = {row:row};
             if (WinEvaluation.isWinningBoard(game, ownPlayerID)) {
-                event.gameOver = true;
+                event.winnerID = ownPlayerID;
             }
             else {
                 event.endTurn = true;
             }
 
             // Save the game
-            var gameToSave = {
-                state:game.state,
-                event:event
-            };
-
             var returnEvent = function(blob) {
                 success(blob.event);
             };
-
-            Plynd.put('/game/' + Plynd.getGameID(), {
-                data:gameToSave,
-                success:returnEvent,
-                error:error
-            });
+            Plynd.updateGame(event, game.state, returnEvent, error);
         });
     };
 });
