@@ -22,6 +22,15 @@ define([
     'game'
 ], function(WinEvaluation, Connect4Game) {
 
+    Plynd.ServerFunctions.initializeGame = function(data, success, error) {
+        var state = {};
+        for (var i = 0; i < 7 ; i++) {
+            (state['row_' + i]) || (state['row_' + i] = []);
+        }
+
+        Plynd.initializeState(state,success, error);
+    };
+
     // Add a function to the pool of ServerFunctions
     Plynd.ServerFunctions.onNewEvent = function(event, success, error) {
         // An event simply specifies the row in which the player attempted to place a gem

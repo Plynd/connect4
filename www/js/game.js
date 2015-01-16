@@ -67,14 +67,7 @@ define([], function() {
             // Take the interesting info from the attributes
             this.loadMeta(attributes);
 
-            // Parse the state in proper form
-            var state = attributes.state;
-            (state !== 'not_initialized') || (state = {});
-            for (var i = 0; i < 7 ; i++) {
-                (state['row_' + i]) || (state['row_' + i] = []);
-            }
-
-            this.state = state;
+            this.state = attributes.state;
         },
 
         // The meta data is all the data managed by Plynd itself.
