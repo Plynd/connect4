@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
 <head>
-    <script src='//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js'></script>
     <script>
         requirejs.config({
             paths:{
-                jquery:'//code.jquery.com/jquery-1.11.1.min',
-                'plynd-sdk':'//sandbox.plynd.com/plynd-sdk-0.1-unstable.min'
+                jquery:'http://code.jquery.com/jquery-1.11.1.min',
+                'plynd-sdk':'http://sandbox.plynd.com/plynd-sdk-0.1-unstable.min'
             },
             baseUrl:'./js'
         });
@@ -24,9 +24,14 @@
 </head>
 
 <body>
-<div id="page">
-    <div id="board"></div>
-    <div id="turn"></div>
+<div id="page" > 
+        <div id="turn-cont">
+            <div class="scale"></div><div id="turn"></div>
+        </div>
+        <div id="game-cont" >
+            <div class="scale"></div><div id="board"></div>
+        </div>
 </div>
+
 </body>
 </html>

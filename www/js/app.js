@@ -19,11 +19,14 @@ define([
 
             // This will remember if an event of placing a gem is ongoing
             var currentPlacement = false;
-
+            //Look at window orientation
             // Grab the data corresponding to this game using the Plynd SDK
             Plynd.getGame(function(gameResponse/* json object */) {
                 // initialize our game representation from the json
                 game.initialize(gameResponse);
+
+                // Analyse window orientation 
+                checkOrientation();
 
                 // Trigger the rendering
                 showState();
@@ -31,6 +34,22 @@ define([
                 // Register the callback to any new event happening on the game
                 Plynd.Realtime.onEvent(onEvent);
             });
+
+            $(window).resize(function() {
+                checkOrientation();
+            });
+
+            var checkOrientation = function() {
+                var gameContHeight = $('#game-cont').height();
+                var gameContWidth = $('#game-cont').width();
+
+                if (gameContWidth >= gameContHeight) {
+                    $('#board').css({
+                        'max-width' : (gameContHeight)*7/6
+                    })
+                } 
+            }
+
 
             var showState = function() {
                 $('#board').empty();
@@ -43,10 +62,12 @@ define([
 
                 // Show the current player
                 var message;
+                var playerWithTurnId = game.getPlayerWithTurn().playerID;
+
                 if (game.isOver()) {
                     var winner = game.getWinner();
                     if (winner.playerID == game.ownPlayerID) {
-                        message = 'You won the game';
+                        message = 'You won the game !';
                     }
                     else {
                         message = winner.playerName + ' won the game';
@@ -55,6 +76,7 @@ define([
                 else {
                     message = (game.hasTurn()) ? 'It is your turn' : 'It is ' + game.getPlayerWithTurn().playerName + '\'s turn';
                 }
+                $('#turn-cont').css('background-color', game.getPlayerColor(playerWithTurnId));
                 $('#turn').text(message);
             };
 
@@ -68,18 +90,20 @@ define([
 
                 // Add the gems from the bottom to the top
                 row.map(function(playerID) {
-                    var gem = $('<div/>', {
-                        class:'gem player'
-                    });
+                    var gemCont = $('<div/>',{
+                    class: 'gemCont'    
+                });
+                    var gem = $('<div/>',{
+                    class: 'gem'    
+                });
                     gem.css('background-color', game.getPlayerColor(playerID));
-                    rowDiv.prepend(gem);
+                    gemCont.append(gem);
+                    rowDiv.prepend(gemCont);
                 });
 
                 // Append available spots
                 for (var i = 0; i < 6 - row.length ; i++) {
-                    rowDiv.prepend($('<div/>', {
-                        class:'gem available'
-                    }));
+                    rowDiv.prepend($('<div class="gemCont"><div class="gem available"></div></div>', {}));
                 }
 
                 // The highlighting of the row (to show where the gem would be placed)
