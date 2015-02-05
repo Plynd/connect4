@@ -43,9 +43,7 @@ define([
             // Analyse #game-cont height and adapt #board width
             var adaptBoardSize = function() {
                 var gameContHeight = $('#game-cont').height();
-                $('#board').css({
-                        'max-width' : (gameContHeight)*7/6
-                    })
+                $('#board').css('max-width' : (gameContHeight)*7/6);
             }
 
             // Show board and player's turn states
@@ -58,7 +56,7 @@ define([
                     $('#board').append(row);
                 }
 
-                turnTo();
+                turnInfo();
             }
 
 
@@ -78,17 +76,15 @@ define([
                 for (var i = 0; i < 6 ; i++) {
 
                     var sqHolder = createDiv('sqHolder');
+                    var gem = createDiv('gem');
+                    sqHolder.append(gem);
 
                     if (i < row.length) { 
-                        var gem = createDiv('gem');
                         gem.css('background-color', game.getPlayerColor(row[i]));
-                        sqHolder.append(gem);
                     }
                     else {
-                        var available = createDiv('gem available');
-                        sqHolder.append(available);
+                        gem.addClass('available');
                     }
-
                     rowDiv.prepend(sqHolder);
                 }
 
@@ -96,7 +92,7 @@ define([
                 rowDiv.on('mouseenter', function() {
                     if (!currentPlacement && game.canPlace(rowIndex)) {
                         rowDiv.find('.available').last().css({
-                            'background-color':game.getOwnColor(),
+                            'background-color': game.getOwnColor(),
                             'opacity':0.6
                         });
                         rowDiv.css('cursor', 'pointer');
@@ -105,7 +101,10 @@ define([
                 rowDiv.on('mouseleave', function() {
                     // Do not remove while submitting the event
                     if (!currentPlacement) {
-                        rowDiv.find('.available').css({'background-color':'', opacity:1});
+                        rowDiv.find('.available').css({
+                            'background-color':'', 
+                            opacity:1
+                        });
                         rowDiv.css('cursor', '');
                     }
                 });
@@ -122,7 +121,7 @@ define([
             };
 
             // Check the game state and display a message into #turn
-            var turnTo = function() {
+            var turnInfo = function() {
 
                 var message;
 
@@ -131,10 +130,10 @@ define([
                     $('#turn-cont').css('background-color', winner.playerColor);
 
                     if (winner.playerID == game.ownPlayerID) {
-                        message = 'You won the game !';
+                        message = 'You won the game!';
                     }
                     else {
-                        message = winner.playerName + ' won the game !';
+                        message = winner.playerName + ' won the game!';
                     }
                 }
 
