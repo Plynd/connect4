@@ -29,7 +29,7 @@ body {
 }
 #game-cont {
     position: absolute;
-    top:50px;
+    top:70px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -61,7 +61,7 @@ body {
     top:0;
     left: 0;
     right: 0;
-    height: 50px;
+    height: 70px;
     text-align: center;
 }
 #turn-cont > div {
@@ -72,11 +72,11 @@ body {
     display: inline-block;
     width: 14%;
 }
-.gemCont{
+.sqHolder{
     position: relative;
     width: 100%;    
 }
-.gemCont:before{
+.sqHolder:before{
     content: "";
     display: block;
     padding-top: 100%;  
