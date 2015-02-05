@@ -19,11 +19,14 @@ define([
 
             // This will remember if an event of placing a gem is ongoing
             var currentPlacement = false;
-
+            //Look at window orientation
             // Grab the data corresponding to this game using the Plynd SDK
             Plynd.getGame(function(gameResponse/* json object */) {
                 // initialize our game representation from the json
                 game.initialize(gameResponse);
+
+                // Analyse #game-cont height and adapt #board width
+                adaptBoardSize();
 
                 // Trigger the rendering
                 showState();
@@ -32,6 +35,18 @@ define([
                 Plynd.Realtime.onEvent(onEvent);
             });
 
+            // Listen each window resize event
+            $(window).resize(function() {
+                adaptBoardSize();
+            });
+
+            // Analyse #game-cont height and adapt #board width
+            var adaptBoardSize = function() {
+                var gameContHeight = $('#game-cont').height();
+                $('#board').css('max-width' : (gameContHeight)*7/6);
+            }
+
+            // Show board and player's turn states
             var showState = function() {
                 $('#board').empty();
 
@@ -41,52 +56,43 @@ define([
                     $('#board').append(row);
                 }
 
-                // Show the current player
-                var message;
-                if (game.isOver()) {
-                    var winner = game.getWinner();
-                    if (winner.playerID == game.ownPlayerID) {
-                        message = 'You won the game';
-                    }
-                    else {
-                        message = winner.playerName + ' won the game';
-                    }
-                }
-                else {
-                    message = (game.hasTurn()) ? 'It is your turn' : 'It is ' + game.getPlayerWithTurn().playerName + '\'s turn';
-                }
-                $('#turn').text(message);
-            };
+                turnInfo();
+            }
+
+
+            // Just create a div for showRow function
+            var createDiv = function(classes) {
+                    var div = $('<div/>',{
+                        class: classes    
+                    });
+                    return div ;
+            }
 
             // Show one row and attach a click listener to it
             var showRow = function(rowIndex) {
                 var row = game.getRow(rowIndex);
+                var rowDiv = createDiv('row');
 
-                var rowDiv = $('<div/>', {
-                    class:'row'
-                });
+                for (var i = 0; i < 6 ; i++) {
 
-                // Add the gems from the bottom to the top
-                row.map(function(playerID) {
-                    var gem = $('<div/>', {
-                        class:'gem player'
-                    });
-                    gem.css('background-color', game.getPlayerColor(playerID));
-                    rowDiv.prepend(gem);
-                });
+                    var sqHolder = createDiv('sqHolder');
+                    var gem = createDiv('gem');
+                    sqHolder.append(gem);
 
-                // Append available spots
-                for (var i = 0; i < 6 - row.length ; i++) {
-                    rowDiv.prepend($('<div/>', {
-                        class:'gem available'
-                    }));
+                    if (i < row.length) { 
+                        gem.css('background-color', game.getPlayerColor(row[i]));
+                    }
+                    else {
+                        gem.addClass('available');
+                    }
+                    rowDiv.prepend(sqHolder);
                 }
 
                 // The highlighting of the row (to show where the gem would be placed)
                 rowDiv.on('mouseenter', function() {
                     if (!currentPlacement && game.canPlace(rowIndex)) {
                         rowDiv.find('.available').last().css({
-                            'background-color':game.getOwnColor(),
+                            'background-color': game.getOwnColor(),
                             'opacity':0.6
                         });
                         rowDiv.css('cursor', 'pointer');
@@ -95,7 +101,10 @@ define([
                 rowDiv.on('mouseleave', function() {
                     // Do not remove while submitting the event
                     if (!currentPlacement) {
-                        rowDiv.find('.available').css({'background-color':'', opacity:1});
+                        rowDiv.find('.available').css({
+                            'background-color':'', 
+                            opacity:1
+                        });
                         rowDiv.css('cursor', '');
                     }
                 });
@@ -111,6 +120,30 @@ define([
                 return rowDiv;
             };
 
+            // Check the game state and display a message into #turn
+            var turnInfo = function() {
+
+                var message;
+
+                if (game.isOver()) {
+                    var winner = game.getWinner();
+                    $('#turn-cont').css('background-color', winner.playerColor);
+
+                    if (winner.playerID == game.ownPlayerID) {
+                        message = 'You won the game!';
+                    }
+                    else {
+                        message = winner.playerName + ' won the game!';
+                    }
+                }
+
+                else {
+                    $('#turn-cont').css('background-color', game.getPlayerWithTurn().playerColor);
+                    message = (game.hasTurn()) ? 'It is your turn' : 'It is ' + game.getPlayerWithTurn().playerName + '\'s turn';
+                }
+
+                $('#turn').text(message);
+            };
             // Allow the user to execute an action
             var relaxCurrentPlacement = function() {
                 currentPlacement = false;
