@@ -72,11 +72,7 @@ define([
                 event.endTurn = true;
             }
 
-            // Save the game
-            var returnEvent = function(blob) {
-                success(blob.event);
-            };
-            Plynd.updateGame(event, game.state, returnEvent, error);
+            Plynd.updateGame(event, game.state, success, error);
         });
     };
 });

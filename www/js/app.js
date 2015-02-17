@@ -112,7 +112,7 @@ define([
                 rowDiv.on('click', function() {
                     if (!currentPlacement && game.canPlace(rowIndex)) {
                         currentPlacement = true;
-                        Plynd.sendNewEvent({row:rowIndex}, onEvent, relaxCurrentPlacement);
+                        Plynd.call('onNewEvent', {row:rowIndex}, onEvent, relaxCurrentPlacement);
                     }
                 });
 
