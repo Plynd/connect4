@@ -10,7 +10,7 @@
  */
 define([
     'game'
-    ,'server' // Remove this when deploying to live
+    // ,'server' // Remove this when deploying to live
 ], function(Connect4Game) {
     return {
         launch:function() {
