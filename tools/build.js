@@ -1,4 +1,4 @@
-{
+({
     "appDir":"../www",
     "baseUrl":"./js",
     "dir": "../www-built",
@@ -12,4 +12,4 @@
     ],
     optimizeCss: 'standard',
     removeCombined: true
-}
+})

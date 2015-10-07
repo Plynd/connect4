@@ -21,9 +21,9 @@ define([
             var currentPlacement = false;
             //Look at window orientation
             // Grab the data corresponding to this game using the Plynd SDK
-            Plynd.getGame(function(gameResponse/* json object */) {
+            Plynd.getGame(function(state, metadata) {
                 // initialize our game representation from the json
-                game.initialize(gameResponse);
+                game.initialize(state, metadata);
 
                 // Analyse #game-cont height and adapt #board width
                 adaptBoardSize();

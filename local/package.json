@@ -1,0 +1,17 @@
+{
+  "name": "local",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laurent Sigal <laurent@plynd.com> (https://github.com/laurentsigal)",
+  "license": "ISC",
+
+    "dependencies": {
+        "express": "^4.13.3",
+        "morgan": "^1.6.1",
+        "serve-static": "^1.10.0"
+    }
+}

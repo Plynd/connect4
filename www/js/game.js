@@ -21,20 +21,24 @@ define([], function() {
     _extend(Game, {
         // A few utilities to work with the state of the game. Again, a library like backbone would help
         getPlayer:function(searchedPlayerID) {
-            return this.getPlayerBy(function(player) {return player.playerID == searchedPlayerID});
+            return this.players[searchedPlayerID];
+        },
+
+        getPlayerBy:function(criteria) {
+            var players = this.players;
+            var playerIDs = Object.keys(this.players).filter(function(playerID) {
+                var player = players[playerID];
+                return criteria(player);
+            });
+
+            if (playerIDs.length) {
+                return players[playerIDs[0]];
+            }
+            return null;
         },
 
         getPlayerWithTurn:function() {
             return this.getPlayerBy(function(player) {return player.status == 'has_turn'});
-        },
-
-        getPlayers:function(criteria) {
-            return this.players.filter(criteria);
-        },
-
-        getPlayerBy:function(criteria) {
-            var matched = this.getPlayers(criteria);
-            return (matched.length) ? matched[0] : null;
         },
 
         getPlayerColor: function(playerID) {
@@ -63,13 +67,11 @@ define([], function() {
             return this.getPlayerBy(function(player) {return player.status == 'winner';});
         },
 
-        initialize:function(attributes) {
+        initialize:function(state, metadata) {
             // Take the interesting info from the attributes
-            this.loadMeta(attributes);
+            this.loadMeta(metadata);
 
-            var state = attributes.state;
             if (Object.keys(state).length === 0) {
-                state = {};
                 for (var i = 0; i < 7 ; i++) {
                     (state['row_' + i]) || (state['row_' + i] = []);
                 }
@@ -87,7 +89,7 @@ define([], function() {
             // Take the interesting info from the meta state
             this.players = meta.players;
             this.status = meta.status;
-            this.ownPlayerID = meta.ownPlayerID;
+            this.ownPlayerID = meta.ownPlayerID || meta.ownPlayer.playerID;
         },
 
         getRow:function(rowIndex) {

@@ -29,8 +29,8 @@ define([
 
         var game = new Connect4Game();
 
-        Plynd.getGame(function(gameResponse) {
-            game.initialize(gameResponse);
+        Plynd.getGame(function(state, metadata) {
+            game.initialize(state, metadata);
 
             // Check if the player has turn
             if (!game.hasTurn()) {
